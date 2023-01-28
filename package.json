@@ -4,8 +4,7 @@
   "description": "\"Backend for Coffe Shop Web Apps with Express Js and Posgresql\"",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "\"Coffee\"",
