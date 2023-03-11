@@ -1,28 +1,26 @@
-// Imports
-const multer = require('multer') // multer
+/* eslint-disable no-unused-vars */
+const multer = require("multer");
+const path = require("path");
 
-
-// Save upload image in storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public/uploads')
-    },
-    filename: function (req, file, cb) {
-        // eslint-disable-next-line no-undef
-        cb(null, `${file.fieldname}_${Date.now()}_${file.originalname.replace(/\s/g, '')}`)
+const formUploadOnline = multer({
+  storage: multer.diskStorage({}), //test bisa atau ga
+  fileFilter: (req, file, cb) => {
+    //console.log(file);
+    let formatType = path.extname(file.originalname);
+    if (
+      formatType == ".png" ||
+      formatType == ".jpg" ||
+      formatType == ".jpeg" ||
+      formatType == ".webp"
+    ) {
+      cb(null, true);
+    } else {
+      cb("Format file is not supported!", false);
     }
-})
+  },
+  limits: {
+    fileSize: 1048576 * 5, //2 mb
+  },
+});
 
-
-const upload = multer({
-    storage: storage
-})
-
-
-const uploadSingle = multer({
-    storage: storage
-})
-
-
-// Export
-module.exports = {upload, uploadSingle }
+module.exports = formUploadOnline;
