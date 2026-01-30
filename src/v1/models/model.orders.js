@@ -1,6 +1,6 @@
 // Imports
 const db = require("../helpers/database.connect"); // Database Connection
-// const { v4: uuidv4 } = require("uuid"); // UUUID ID Generator Package
+const { v4: uuidv4 } = require("uuid"); // UUUID ID Generator Package
 
 // Model
 const ordersModel = {
@@ -18,7 +18,6 @@ const ordersModel = {
     });
   },
   add: ({
-    id_order,
     id_product,
     size,
     quantity,
@@ -36,7 +35,7 @@ const ordersModel = {
       db.query(
         `INSERT INTO orders (id, id_product, size, quantity, total_price, tax, shipping, discount, id_user, date, delivery, payment_method, product_image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
         [
-          id_order,
+          uuidv4(),
           id_product,
           size,
           quantity,

@@ -170,21 +170,14 @@ const productsModel = {
   // },
   remove: (id) => {
     return new Promise((success, failed) => {
-      db.query(`DELETE FROM products WHERE id='${id}'`, (error) => {
-        if (error) {
-          return failed(error.message);
-        } else {
-          db.query(
-            `DELETE FROM product_images WHERE id_product=$1 RETURNING filename`,
-            [id],
-            (error, result) => {
-              if (error) return failed("Failed to delete image!");
-              if (result.rows.length == 0) return failed("Id not found!");
-              return success({ productImage: result.rows });
-            }
-          );
-        }
-      });
+      db.query(`SELECT filename FROM product_images WHERE id_product=$1`, [id], (error, resultProductImages) => {
+        if (error) return failed("Failed to get image!");
+
+        db.query(`DELETE FROM products WHERE id='${id}'`, (error) => {
+          if (error) return failed(error.message);
+          return success({ productImage: resultProductImages.rows });
+        });
+      })
     });
   },
   search: (queryParams) => {

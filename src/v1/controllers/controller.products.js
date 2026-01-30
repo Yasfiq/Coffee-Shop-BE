@@ -49,7 +49,6 @@ const productsController = {
   },
   add: async (req, res) => {
     // Check if input is empty
-    console.log("y");
     for (const value of Object.values(req.body)) {
       if (value == "") {
         return res.send({

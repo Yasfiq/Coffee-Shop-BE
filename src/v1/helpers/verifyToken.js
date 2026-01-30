@@ -2,23 +2,24 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 // eslint-disable-next-line no-undef
-const {SECRET_KEY} = process.env
+const { SECRET_KEY } = process.env
 
 const verifyToken = (req, res, next) => {
-    if (!req.header('token')) {
+    const token = req.header("authorization")?.substring(7);
+    if (!token) {
         return res.status(400).send({
             Message: "you don't have access"
         })
     }
     else {
-        jwt.verify(req.header('token'), SECRET_KEY, function(err, decoded) {
+        jwt.verify(token, SECRET_KEY, function (err, decoded) {
             if (!err) {
-                if (decoded.role == 'user') {
+                if (decoded.role == 'super') {
+                    next()
+                } else {
                     return res.status(403).send({
                         Message: "You don't have access"
                     })
-                } else {
-                    next()
                 }
             } else {
                 return res.status(400).send({
@@ -26,7 +27,7 @@ const verifyToken = (req, res, next) => {
                     Error: err.message
                 })
             }
-        } )
+        })
     }
 }
 
